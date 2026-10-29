@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Closet</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cher: {
+                            hotpink: '#FF1493',
+                            brightpink: '#FF69B4',
+                            lightpink: '#FFB6C1',
+                            softpink: '#FFD1DC',
+                            glitterdark: '#12020A',
+                            carddark: '#1C0A14'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        pixel: ['"Courier New"', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('https://i.pinimg.com/736x/d7/9d/ec/d79dec51b5c1026343557972fbd27898.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* HEADER BACKGROUND */
+        .header-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)), url('https://i.pinimg.com/1200x/3f/be/53/3fbe53a05ce82d12f00dfda33391b362.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* RETRO HOT PINK PIXEL GLITTER ARROWS */
+        .pixel-glitter-btn {
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 50%, #C71585 100%);
+            border: 2px solid #FFF;
+            box-shadow: 0 0 8px rgba(255, 20, 147, 0.8), inset 0 0 6px rgba(255, 255, 255, 0.8), 3px 3px 0px #000;
+            image-rendering: pixelated;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.15s ease;
+        }
+        .pixel-glitter-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 10%, transparent 20%);
+            background-size: 10px 10px;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .pixel-glitter-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 14px rgba(255, 105, 180, 1), inset 0 0 10px rgba(255, 255, 255, 0.9), 4px 4px 0px #000;
+        }
+        .pixel-glitter-btn:active {
+            transform: translate(2px, 2px) scale(0.96);
+            box-shadow: 0 0 4px rgba(255, 20, 147, 0.6), 1px 1px 0px #000;
+        }
+
+        /* TRANSPARENT SLOT CONTAINER */
+        .slot-container {
+            background-color: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(4px);
+            border: 1.5px dashed rgba(255, 255, 255, 0.45);
+            border-radius: 14px;
+            transition: all 0.2s ease;
+        }
+        .slot-container:hover {
+            background-color: rgba(255, 255, 255, 0.22);
+            border-color: rgba(255, 20, 147, 0.7);
+            box-shadow: 0 0 12px rgba(255, 105, 180, 0.3);
+        }
+
+        /* Sleek Black Box Controls */
+        .dark-retro-box {
+            background: linear-gradient(180deg, rgba(20, 5, 15, 0.92) 0%, rgba(5, 1, 4, 0.95) 100%);
+            border: 1.5px solid rgba(255, 105, 180, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 0 12px rgba(255, 20, 147, 0.15);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(18, 2, 10, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FF1493;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white flex flex-col justify-between selection:bg-cher-hotpink selection:text-white">
+
+    <!-- TOP GLITTER IMAGE HEADER -->
+    <header class="header-bg w-full border-b-2 border-cher-hotpink/50 sticky top-0 z-40 px-4 sm:px-8 py-3 shadow-2xl">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            
+            <!-- Navigation Controls -->
+            <nav class="flex items-center space-x-3">
+                <button id="nav-match" onclick="switchTab('match')" class="px-5 py-2 rounded-xl text-xs sm:text-sm font-black tracking-wide transition-all duration-200 bg-cher-hotpink text-white shadow-[0_0_12px_rgba(255,20,147,0.8)] border border-white/60">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> MATCHER
+                </button>
+                <button id="nav-wardrobe" onclick="switchTab('wardrobe')" class="px-5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 bg-black/50 text-cher-lightpink hover:text-white hover:bg-black/70 border border-cher-hotpink/30">
+                    <i class="fa-solid fa-border-all mr-1.5"></i> WARDROBE
+                </button>
+            </nav>
+
+            <!-- User Auth Profile Button -->
+            <div class="flex items-center space-x-2">
+                <button id="auth-btn" onclick="openAuthModal()" class="flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl bg-black/60 border border-cher-hotpink/50 text-cher-lightpink hover:text-white text-xs font-bold transition-all shadow-md">
+                    <i class="fa-solid fa-sparkles text-cher-hotpink text-sm"></i>
+                    <span id="auth-status-text">Cloud Sync</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN APP CONTAINER -->
+    <main class="max-w-5xl mx-auto w-full px-3 py-6 flex-grow flex flex-col items-center">
+
+        <!-- TAB 1: OUTFIT MATCHER -->
+        <section id="tab-match" class="w-full flex flex-col items-center space-y-6">
+            
+            <!-- CONTROL BAR BLOCK -->
+            <div class="dark-retro-box w-full max-w-xl p-3.5 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-white">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-gem text-cher-hotpink text-lg animate-pulse"></i>
+                    <span class="text-xs font-extrabold tracking-wider text-cher-lightpink uppercase">Styling Desk</span>
+                </div>
+
+                <!-- Controls Buttons -->
+                <div class="flex items-center space-x-2">
+                    <button onclick="spinAllSlots()" class="pixel-glitter-btn px-4 py-2 rounded-xl text-white font-extrabold text-xs flex items-center space-x-2 cursor-pointer">
+                        <i class="fa-solid fa-dice text-sm"></i>
+                        <span>RANDOM GENERATE</span>
+                    </button>
+                    <button onclick="promptSaveOutfit()" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-cher-lightpink hover:text-white text-xs font-bold transition-all border border-cher-hotpink/40 flex items-center space-x-1.5 shadow-sm">
+                        <i class="fa-solid fa-heart text-cher-hotpink"></i>
+                        <span>Save Match</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- HUMAN PROPORTIONAL CLOSET STACK -->
+            <div class="w-full max-w-xl flex flex-col items-center space-y-2.5 py-2">
+                
+                <!-- 1. HAT SLOT -->
+                <div class="flex items-center space-x-3 justify-center">
+                    <button onclick="cycleSlot('hat', -1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">◀</button>
+                    <div id="slot-box-hat" onclick="openSlotPicker('hat')" class="slot-container w-[140px] h-[70px] flex flex-col items-center justify-center text-center p-1 cursor-pointer relative group overflow-hidden">
+                        <!-- Rendered JS -->
+                    </div>
+                    <button onclick="cycleSlot('hat', 1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">▶</button>
+                </div>
+
+                <!-- 2. NECKLACE / NECK SLOT -->
+                <div class="flex items-center space-x-3 justify-center">
+                    <button onclick="cycleSlot('necklace', -1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">◀</button>
+                    <div id="slot-box-necklace" onclick="openSlotPicker('necklace')" class="slot-container w-[160px] h-[45px] flex flex-col items-center justify-center text-center p-1 cursor-pointer relative group overflow-hidden">
+                        <!-- Rendered JS -->
+                    </div>
+                    <button onclick="cycleSlot('necklace', 1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">▶</button>
+                </div>
+
+                <!-- 3. TORSO / SHIRT / JACKET SLOT -->
+                <div class="flex items-center space-x-3 justify-center">
+                    <button onclick="cycleSlot('shirt', -1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">◀</button>
+                    <div id="slot-box-shirt" onclick="openSlotPicker('shirt')" class="slot-container w-[240px] h-[180px] flex flex-col items-center justify-center text-center p-2 cursor-pointer relative group overflow-hidden">
+                        <!-- Rendered JS -->
+                    </div>
+                    <button onclick="cycleSlot('shirt', 1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">▶</button>
+                </div>
+
+                <!-- 4. PANTS/SKIRT SLOT -->
+                <div class="flex items-center space-x-3 justify-center">
+                    <button onclick="cycleSlot('pants', -1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">◀</button>
+                    <div id="slot-box-pants" onclick="openSlotPicker('pants')" class="slot-container w-[220px] h-[260px] flex flex-col items-center justify-center text-center p-2 cursor-pointer relative group overflow-hidden">
+                        <!-- Rendered JS -->
+                    </div>
+                    <button onclick="cycleSlot('pants', 1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">▶</button>
+                </div>
+
+                <!-- 5. SHOES SLOT -->
+                <div class="flex items-center space-x-3 justify-center">
+                    <button onclick="cycleSlot('shoes', -1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">◀</button>
+                    <div id="slot-box-shoes" onclick="openSlotPicker('shoes')" class="slot-container w-[200px] h-[85px] flex flex-col items-center justify-center text-center p-2 cursor-pointer relative group overflow-hidden">
+                        <!-- Rendered JS -->
+                    </div>
+                    <button onclick="cycleSlot('shoes', 1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">▶</button>
+                </div>
+
+            </div>
+
+            <!-- SAVED FAVORITE OUTFITS BLOCK -->
+            <div class="dark-retro-box w-full max-w-2xl p-5 rounded-2xl space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-cher-hotpink/30 pb-3">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-heart text-cher-hotpink text-base"></i>
+                        <h3 class="font-extrabold text-white text-xs uppercase tracking-wider">Saved Favorite Outfits</h3>
+                        <span id="saved-count" class="text-[10px] bg-cher-hotpink/30 border border-cher-hotpink text-cher-lightpink px-2 py-0.5 rounded-full font-bold">0 Saved</span>
+                    </div>
+
+                    <!-- Category Filter Controls -->
+                    <div class="flex items-center space-x-2">
+                        <button onclick="openCategoryModal()" class="text-[11px] bg-white/10 hover:bg-white/20 text-cher-lightpink font-bold px-2.5 py-1 rounded-lg border border-cher-hotpink/40 transition-all">
+                            + New Category
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Outfit Category Pills -->
+                <div id="outfit-category-pills" class="flex flex-wrap gap-1.5">
+                    <!-- Rendered JS -->
+                </div>
+
+                <!-- Saved Outfits Scrollable Horizontal List -->
+                <div id="saved-outfits-list" class="flex space-x-4 overflow-x-auto pb-2 pt-1 min-h-[90px] items-center">
+                    <!-- Rendered JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: WARDROBE & TAG MANAGER -->
+        <section id="tab-wardrobe" class="hidden w-full max-w-4xl space-y-6">
+            
+            <div class="dark-retro-box p-4 rounded-2xl flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                <div>
+                    <h2 class="text-base font-extrabold text-white tracking-wide">Wardrobe & Custom Tag Creator</h2>
+                    <p class="text-xs text-cher-lightpink">Organize items with your own custom tags.</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="openCreateTagModal()" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-cher-lightpink border border-cher-hotpink/50 font-bold text-xs transition-all flex items-center space-x-1.5">
+                        <i class="fa-solid fa-tag text-cher-hotpink"></i>
+                        <span>+ Custom Tag</span>
+                    </button>
+                    <button onclick="openAddItemModal()" class="pixel-glitter-btn px-4 py-2 rounded-xl text-white font-extrabold text-xs transition-all flex items-center space-x-1.5">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Add Clothing</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search & Custom Tag Controls -->
+            <div class="dark-retro-box p-4 rounded-2xl space-y-4">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-cher-hotpink"></i>
+                    <input type="text" id="search-input" oninput="renderWardrobeGrid()" placeholder="Search wardrobe..." class="w-full pl-11 pr-10 py-2.5 rounded-xl bg-black/60 border border-cher-hotpink/40 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-cher-hotpink">
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label class="text-[10px] font-extrabold uppercase text-cher-lightpink tracking-wider">Your Custom Tags:</label>
+                        <button onclick="clearSelectedTags()" class="text-xs text-cher-brightpink hover:underline font-semibold">Reset Tags</button>
+                    </div>
+                    <div id="tag-cloud" class="flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+
+            <!-- Items Grid Display -->
+            <div id="wardrobe-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+            
+            <div id="empty-grid-msg" class="hidden text-center py-12 dark-retro-box rounded-2xl">
+                <i class="fa-solid fa-shirt text-3xl text-cher-hotpink mb-2"></i>
+                <h3 class="font-bold text-white text-sm">No attire matches your search</h3>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL: SAVE OUTFIT WITH CUSTOM CATEGORY -->
+    <div id="modal-save-outfit" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="dark-retro-box max-w-sm w-full rounded-2xl p-6 relative text-white">
+            <button onclick="closeSaveOutfitModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="font-extrabold text-base text-white mb-1 flex items-center">
+                <i class="fa-solid fa-heart text-cher-hotpink mr-2"></i> Save Outfit Match
+            </h3>
+            <p class="text-xs text-cher-lightpink mb-4">Select or create a custom outfit category.</p>
+
+            <form onsubmit="handleConfirmSaveOutfit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-cher-lightpink mb-1">Outfit Category</label>
+                    <select id="save-outfit-category-select" class="w-full px-3 py-2 rounded-xl bg-black/80 border border-cher-hotpink/50 text-xs text-white focus:outline-none">
+                        <!-- Rendered JS -->
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-cher-lightpink mb-1">Or New Category Name</label>
+                    <input type="text" id="save-outfit-new-category" placeholder="e.g. Y2K Glam, School, Party" class="w-full px-3 py-2 rounded-xl bg-black/80 border border-cher-hotpink/40 text-xs text-white focus:outline-none">
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeSaveOutfitModal()" class="px-4 py-2 rounded-xl border border-gray-600 text-xs font-bold text-gray-300">Cancel</button>
+                    <button type="submit" class="pixel-glitter-btn px-5 py-2 rounded-xl text-white text-xs font-bold">Save Match</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: CREATE CUSTOM OUTFIT CATEGORY -->
+    <div id="modal-custom-category" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="dark-retro-box max-w-sm w-full rounded-2xl p-6 relative text-white">
+            <button onclick="closeCategoryModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="font-extrabold text-base text-white mb-2 flex items-center">
+                <i class="fa-solid fa-folder-plus text-cher-hotpink mr-2"></i> Create Outfit Category
+            </h3>
+            <form onsubmit="handleCreateCategorySubmit(event)" class="space-y-4">
+                <div>
+                    <input type="text" id="new-category-name" required placeholder="Category name (e.g., Casual, Party)" class="w-full px-3 py-2 rounded-xl bg-black/80 border border-cher-hotpink/40 text-xs text-white focus:outline-none">
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closeCategoryModal()" class="px-4 py-2 rounded-xl border border-gray-600 text-xs font-bold text-gray-300">Cancel</button>
+                    <button type="submit" class="pixel-glitter-btn px-5 py-2 rounded-xl text-white text-xs font-bold">+ Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: CREATE CUSTOM TAG MODAL -->
+    <div id="modal-custom-tag" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="dark-retro-box max-w-sm w-full rounded-2xl p-6 relative text-white">
+            <button onclick="closeCustomTagModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="font-extrabold text-base text-white mb-2 flex items-center">
+                <i class="fa-solid fa-tags text-cher-hotpink mr-2"></i> Create Custom Tag
+            </h3>
+            <form onsubmit="handleCreateTagSubmit(event)" class="space-y-4">
+                <div>
+                    <input type="text" id="new-tag-name" required placeholder="Tag name (e.g., Pink, Vintage, Cozy)" class="w-full px-3 py-2 rounded-xl bg-black/80 border border-cher-hotpink/40 text-xs text-white focus:outline-none">
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closeCustomTagModal()" class="px-4 py-2 rounded-xl border border-gray-600 text-xs font-bold text-gray-300">Cancel</button>
+                    <button type="submit" class="pixel-glitter-btn px-5 py-2 rounded-xl text-white text-xs font-bold">+ Add Tag</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / EDIT ITEM MODAL -->
+    <div id="modal-item" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="dark-retro-box max-w-md w-full rounded-2xl p-6 relative text-white">
+            <button onclick="closeItemModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 id="modal-title" class="font-extrabold text-base text-white mb-4">Add Clothing Item</h3>
+
+            <form id="item-form" onsubmit="handleSaveItem(event)" class="space-y-4">
+                <input type="hidden" id="item-id">
+                
+                <div>
+                    <label class="block text-xs font-bold text-cher-lightpink mb-1">Item Title</label>
+                    <input type="text" id="item-title" required placeholder="e.g. Pink Plaid Jacket" class="w-full px-3 py-2 rounded-xl bg-black/80 border border-cher-hotpink/40 text-xs text-white focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-cher-lightpink mb-1">Body Slot Position</label>
+                    <select id="item-category" required class="w-full px-3 py-2 rounded-xl bg-black/80 border border-cher-hotpink/40 text-xs text-white focus:outline-none">
+                        <option value="hat">Hat (Head)</option>
+                        <option value="necklace">Necklace (Neck)</option>
+                        <option value="shirt">Shirt / Jackets (Torso)</option>
+                        <option value="pants">Pants / Skirt (Legs)</option>
+                        <option value="shoes">Shoes (Feet)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-cher-lightpink mb-1">Image URL (Transparent PNG)</label>
+                    <input type="text" id="item-img-url" placeholder="https://..." class="w-full px-3 py-2 rounded-xl bg-black/80 border border-cher-hotpink/40 text-xs text-white focus:outline-none mb-2">
+                    <input type="file" id="item-file-input" accept="image/*" onchange="handleFileUpload(event)" class="block w-full text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-cher-hotpink file:text-white">
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block text-xs font-bold text-cher-lightpink">Tags</label>
+                        <button type="button" onclick="openCreateTagModal()" class="text-[10px] text-cher-brightpink font-bold hover:underline">+ New Tag</button>
+                    </div>
+                    <div id="modal-tag-selector" class="flex flex-wrap gap-1.5 p-2 bg-black/50 border border-cher-hotpink/30 rounded-xl min-h-[40px]"></div>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeItemModal()" class="px-4 py-2 rounded-xl border border-gray-600 text-xs font-bold text-gray-300">Cancel</button>
+                    <button type="submit" class="pixel-glitter-btn px-5 py-2 rounded-xl text-white text-xs font-bold">Save Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast-msg" class="fixed bottom-6 right-6 transform translate-y-20 opacity-0 transition-all duration-300 z-50 pointer-events-none">
+        <div class="dark-retro-box px-4 py-2.5 rounded-xl flex items-center space-x-2 border border-cher-hotpink shadow-2xl">
+            <i class="fa-solid fa-sparkles text-cher-hotpink text-sm"></i>
+            <span id="toast-text" class="text-xs font-bold text-white">Notification</span>
+        </div>
+    </div>
+
+    <!-- FIREBASE INITIALIZATION & STATE MANAGEMENT -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        window.appState = {
+            user: null,
+            userId: null,
+            appId: typeof __app_id !== 'undefined' ? __app_id : 'digital-closet-app',
+            items: [],
+            customTags: [],
+            outfitCategories: ['All', 'Everyday', 'Party', 'School', 'Y2K Glam'],
+            selectedCategoryFilter: 'All',
+            savedOutfits: [],
+            selectedTags: [],
+            modalSelectedTags: [],
+            slotIndexes: {
+                hat: 0,
+                necklace: 0,
+                shirt: 0,
+                pants: 0,
+                shoes: 0
+            }
+        };
+
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "demo-api-key",
+            authDomain: "demo-app.firebaseapp.com",
+            projectId: "demo-app"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        window.db = db;
+        window.auth = auth;
+
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                await signInAnonymously(auth);
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.appState.user = user;
+                window.appState.userId = user.uid;
+                document.getElementById('auth-status-text').innerText = 'Synced';
+                setupRealtimeWardrobe();
+            }
+        });
+
+        function setupRealtimeWardrobe() {
+            if (!window.appState.userId) return;
+            const userItemsRef = collection(db, 'artifacts', window.appState.appId, 'users', window.appState.userId, 'wardrobe');
+
+            onSnapshot(userItemsRef, (snapshot) => {
+                const fetchedItems = [];
+                snapshot.forEach((doc) => {
+                    fetchedItems.push({ id: doc.id, ...doc.data() });
+                });
+
+                if (fetchedItems.length === 0 && window.appState.items.length === 0) {
+                    loadTransparentFillerItems();
+                } else {
+                    window.appState.items = fetchedItems;
+                    renderAll();
+                }
+            }, () => {
+                if (window.appState.items.length === 0) loadTransparentFillerItemsLocally();
+            });
+        }
+
+        async function loadTransparentFillerItems() {
+            const defaults = [
+                { title: 'Pink Cloche Hat', category: 'hat', img: 'https://pngimg.com/uploads/hat/hat_PNG5715.png', tags: ['pink'] },
+                { title: 'Beret', category: 'hat', img: 'https://pngimg.com/uploads/beret/beret_PNG33.png', tags: ['retro'] },
+                { title: 'Pearl Ribbon Choker', category: 'necklace', img: 'https://pngimg.com/uploads/necklace/necklace_PNG62.png', tags: ['chic'] },
+                { title: 'Gold Heart Pendant', category: 'necklace', img: 'https://pngimg.com/uploads/necklace/necklace_PNG42.png', tags: ['gold'] },
+                { title: 'Iconic Plaid Jacket', category: 'shirt', img: 'https://pngimg.com/uploads/jacket/jacket_PNG8058.png', tags: ['plaid'] },
+                { title: 'Pink Crop Knit Sweater', category: 'shirt', img: 'https://pngimg.com/uploads/sweater/sweater_PNG48.png', tags: ['cozy'] },
+                { title: 'Pleated Plaid Skirt', category: 'pants', img: 'https://pngimg.com/uploads/skirt/skirt_PNG60.png', tags: ['school'] },
+                { title: 'High Waisted Jeans', category: 'pants', img: 'https://pngimg.com/uploads/jeans/jeans_PNG5775.png', tags: ['casual'] },
+                { title: 'Pink Heels', category: 'shoes', img: 'https://pngimg.com/uploads/women_shoes/women_shoes_PNG7467.png', tags: ['glam'] },
+                { title: 'White Sneakers', category: 'shoes', img: 'https://pngimg.com/uploads/running_shoes/running_shoes_PNG5823.png', tags: ['casual'] }
+            ];
+
+            if (window.appState.userId) {
+                const userItemsRef = collection(db, 'artifacts', window.appState.appId, 'users', window.appState.userId, 'wardrobe');
+                for (let item of defaults) await addDoc(userItemsRef, item);
+            } else {
+                loadTransparentFillerItemsLocally();
+            }
+        }
+
+        function loadTransparentFillerItemsLocally() {
+            window.appState.items = [
+                { id: '1', title: 'Pink Cloche Hat', category: 'hat', img: 'https://pngimg.com/uploads/hat/hat_PNG5715.png', tags: ['pink'] },
+                { id: '2', title: 'Pearl Ribbon Choker', category: 'necklace', img: 'https://pngimg.com/uploads/necklace/necklace_PNG62.png', tags: ['chic'] },
+                { id: '3', title: 'Iconic Plaid Jacket', category: 'shirt', img: 'https://pngimg.com/uploads/jacket/jacket_PNG8058.png', tags: ['plaid'] },
+                { id: '6', title: 'Pleated Plaid Skirt', category: 'pants', img: 'https://pngimg.com/uploads/skirt/skirt_PNG60.png', tags: ['school'] },
+                { id: '7', title: 'Pink Heels', category: 'shoes', img: 'https://pngimg.com/uploads/women_shoes/women_shoes_PNG7467.png', tags: ['glam'] }
+            ];
+            renderAll();
+        }
+
+        window.addEventListener('load', () => {
+            initAuth();
+            renderDiagramSlots();
+        });
+    </script>
+
+    <!-- CORE INTERACTION SCRIPT -->
+    <script>
+        const SLOT_KEYS = ['hat', 'necklace', 'shirt', 'pants', 'shoes'];
+
+        function renderAll() {
+            renderDiagramSlots();
+            renderWardrobeGrid();
+            renderTagsCloud();
+            renderSavedOutfits();
+            renderCategoryPills();
+        }
+
+        function getFilteredItemsForCategory(catKey) {
+            return window.appState.items.filter(item => {
+                if (item.category !== catKey) return false;
+
+                if (window.appState.selectedTags.length > 0) {
+                    const itemTags = item.tags || [];
+                    const hasTag = window.appState.selectedTags.every(t => itemTags.map(it => it.toLowerCase()).includes(t.toLowerCase()));
+                    if (!hasTag) return false;
+                }
+
+                return true;
+            });
+        }
+
+        function renderDiagramSlots() {
+            SLOT_KEYS.forEach(catKey => {
+                const boxEl = document.getElementById(`slot-box-${catKey}`);
+                if (!boxEl) return;
+
+                const available = getFilteredItemsForCategory(catKey);
+                let curIdx = window.appState.slotIndexes[catKey] || 0;
+
+                if (curIdx >= available.length) {
+                    curIdx = 0;
+                    window.appState.slotIndexes[catKey] = 0;
+                }
+
+                const currentItem = available.length > 0 ? available[curIdx] : null;
+
+                if (currentItem) {
+                    if (currentItem.img) {
+                        boxEl.innerHTML = `
+                            <img src="${currentItem.img}" class="w-full h-full object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] hover:scale-105 transition-transform duration-200">
+                            <span class="absolute bottom-0.5 inset-x-0.5 bg-black/70 text-cher-lightpink text-[8px] font-bold truncate px-1 rounded text-center opacity-0 group-hover:opacity-100 transition-opacity">${currentItem.title}</span>
+                        `;
+                    } else {
+                        boxEl.innerHTML = `<span class="text-xs font-bold text-white bg-black/60 px-2 py-0.5 rounded">${currentItem.title}</span>`;
+                    }
+                } else {
+                    boxEl.innerHTML = `<span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">${catKey}</span>`;
+                }
+            });
+        }
+
+        function cycleSlot(catKey, direction) {
+            const available = getFilteredItemsForCategory(catKey);
+            if (available.length === 0) {
+                showToast(`No items in slot`);
+                return;
+            }
+
+            let curIdx = window.appState.slotIndexes[catKey] || 0;
+            curIdx = (curIdx + direction + available.length) % available.length;
+            window.appState.slotIndexes[catKey] = curIdx;
+            
+            renderDiagramSlots();
+        }
+
+        function spinAllSlots() {
+            SLOT_KEYS.forEach(catKey => {
+                const available = getFilteredItemsForCategory(catKey);
+                if (available.length > 0) {
+                    window.appState.slotIndexes[catKey] = Math.floor(Math.random() * available.length);
+                }
+            });
+            renderDiagramSlots();
+            showToast("✨ Random outfit generated!");
+        }
+
+        // SAVED FAVORITE OUTFITS & CATEGORIZATION
+        function promptSaveOutfit() {
+            const categorySelect = document.getElementById('save-outfit-category-select');
+            categorySelect.innerHTML = '';
+            
+            window.appState.outfitCategories.filter(c => c !== 'All').forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat;
+                opt.innerText = cat;
+                categorySelect.appendChild(opt);
+            });
+
+            document.getElementById('modal-save-outfit').classList.remove('hidden');
+        }
+
+        function closeSaveOutfitModal() {
+            document.getElementById('modal-save-outfit').classList.add('hidden');
+        }
+
+        function handleConfirmSaveOutfit(event) {
+            event.preventDefault();
+            const selectedCat = document.getElementById('save-outfit-category-select').value;
+            const newCatInput = document.getElementById('save-outfit-new-category').value.trim();
+
+            const finalCategory = newCatInput || selectedCat || 'Everyday';
+
+            if (newCatInput && !window.appState.outfitCategories.includes(newCatInput)) {
+                window.appState.outfitCategories.push(newCatInput);
+            }
+
+            const currentOutfit = {};
+            SLOT_KEYS.forEach(catKey => {
+                const available = getFilteredItemsForCategory(catKey);
+                const idx = window.appState.slotIndexes[catKey] || 0;
+                if (available[idx]) currentOutfit[catKey] = available[idx];
+            });
+
+            window.appState.savedOutfits.unshift({
+                id: Date.now(),
+                category: finalCategory,
+                items: currentOutfit,
+                date: new Date().toLocaleDateString()
+            });
+
+            closeSaveOutfitModal();
+            renderCategoryPills();
+            renderSavedOutfits();
+            showToast(`Saved to #${finalCategory}!`);
+        }
+
+        function renderCategoryPills() {
+            const container = document.getElementById('outfit-category-pills');
+            container.innerHTML = '';
+
+            window.appState.outfitCategories.forEach(cat => {
+                const isSelected = window.appState.selectedCategoryFilter === cat;
+                const pill = document.createElement('button');
+                pill.onclick = () => {
+                    window.appState.selectedCategoryFilter = cat;
+                    renderCategoryPills();
+                    renderSavedOutfits();
+                };
+                pill.className = `px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${isSelected ? 'bg-cher-hotpink text-white shadow-md' : 'bg-black/50 border border-cher-hotpink/30 text-cher-lightpink hover:bg-black/80'}`;
+                pill.innerText = cat;
+                container.appendChild(pill);
+            });
+        }
+
+        function renderSavedOutfits() {
+            const container = document.getElementById('saved-outfits-list');
+            const countEl = document.getElementById('saved-count');
+
+            const filtered = window.appState.savedOutfits.filter(o => {
+                if (window.appState.selectedCategoryFilter === 'All') return true;
+                return o.category === window.appState.selectedCategoryFilter;
+            });
+
+            countEl.innerText = `${filtered.length} Saved`;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-400 italic py-2">No outfits saved under category '${window.appState.selectedCategoryFilter}'.</p>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            filtered.forEach((outfit) => {
+                const card = document.createElement('div');
+                card.className = "shrink-0 p-2.5 bg-black/60 rounded-xl border border-cher-hotpink/40 text-xs flex items-center space-x-3 shadow-md";
+                
+                // Render micro icons of items in outfit
+                const itemIcons = Object.keys(outfit.items).map(k => outfit.items[k].img ? `<img src="${outfit.items[k].img}" class="w-6 h-6 object-contain">` : '').join('');
+
+                card.innerHTML = `
+                    <div class="flex flex-col">
+                        <span class="text-[9px] text-cher-hotpink font-extrabold uppercase">${outfit.category}</span>
+                        <div class="flex items-center space-x-1 my-1">${itemIcons}</div>
+                    </div>
+                    <button onclick="loadSavedOutfit(${outfit.id})" class="px-2 py-1 rounded bg-cher-hotpink text-white font-extrabold text-[10px] hover:bg-cher-brightpink">Load</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function loadSavedOutfit(id) {
+            const target = window.appState.savedOutfits.find(o => o.id === id);
+            if (target) {
+                Object.keys(target.items).forEach(catKey => {
+                    const item = target.items[catKey];
+                    const available = getFilteredItemsForCategory(catKey);
+                    const idx = available.findIndex(i => i.id === item.id);
+                    if (idx > -1) window.appState.slotIndexes[catKey] = idx;
+                });
+                renderDiagramSlots();
+                showToast("Loaded saved outfit!");
+            }
+        }
+
+        function openCategoryModal() {
+            document.getElementById('new-category-name').value = '';
+            document.getElementById('modal-custom-category').classList.remove('hidden');
+        }
+        function closeCategoryModal() {
+            document.getElementById('modal-custom-category').classList.add('hidden');
+        }
+        function handleCreateCategorySubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('new-category-name').value.trim();
+            if (name && !window.appState.outfitCategories.includes(name)) {
+                window.appState.outfitCategories.push(name);
+                window.appState.selectedCategoryFilter = name;
+                renderCategoryPills();
+                renderSavedOutfits();
+                closeCategoryModal();
+                showToast(`Created category #${name}`);
+            }
+        }
+
+        // CUSTOM TAG CREATION SYSTEM
+        function openCreateTagModal() {
+            document.getElementById('new-tag-name').value = '';
+            document.getElementById('modal-custom-tag').classList.remove('hidden');
+        }
+        function closeCustomTagModal() {
+            document.getElementById('modal-custom-tag').classList.add('hidden');
+        }
+        function handleCreateTagSubmit(event) {
+            event.preventDefault();
+            const tagInput = document.getElementById('new-tag-name').value.trim().toLowerCase();
+            if (!tagInput) return;
+
+            if (!window.appState.customTags.includes(tagInput)) {
+                window.appState.customTags.push(tagInput);
+                showToast(`Created tag #${tagInput}`);
+            }
+
+            closeCustomTagModal();
+            renderTagsCloud();
+            renderModalTagSelector();
+        }
+
+        function renderTagsCloud() {
+            const cloud = document.getElementById('tag-cloud');
+            const allTags = new Set([...window.appState.customTags]);
+
+            window.appState.items.forEach(item => {
+                if (item.tags) item.tags.forEach(t => allTags.add(t.toLowerCase().trim()));
+            });
+
+            if (allTags.size === 0) {
+                cloud.innerHTML = `<span class="text-xs text-gray-400 italic">No custom tags created yet.</span>`;
+                return;
+            }
+
+            cloud.innerHTML = '';
+            allTags.forEach(tag => {
+                const isSelected = window.appState.selectedTags.includes(tag);
+                const tagBtn = document.createElement('button');
+                tagBtn.onclick = () => toggleTagFilter(tag);
+                tagBtn.className = `px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${isSelected ? 'bg-cher-hotpink text-white shadow-sm' : 'bg-black/60 border border-cher-hotpink/30 text-cher-lightpink hover:bg-black/80'}`;
+                tagBtn.innerText = `#${tag}`;
+                cloud.appendChild(tagBtn);
+            });
+        }
+
+        function toggleTagFilter(tag) {
+            const idx = window.appState.selectedTags.indexOf(tag);
+            if (idx > -1) window.appState.selectedTags.splice(idx, 1);
+            else window.appState.selectedTags.push(tag);
+            renderTagsCloud();
+            renderWardrobeGrid();
+            renderDiagramSlots();
+        }
+
+        function clearSelectedTags() {
+            window.appState.selectedTags = [];
+            renderTagsCloud();
+            renderWardrobeGrid();
+            renderDiagramSlots();
+        }
+
+        // Wardrobe Grid Display
+        function renderWardrobeGrid() {
+            const grid = document.getElementById('wardrobe-grid');
+            const emptyMsg = document.getElementById('empty-grid-msg');
+            const searchVal = document.getElementById('search-input').value.toLowerCase();
+
+            const filtered = window.appState.items.filter(item => {
+                if (searchVal && !item.title.toLowerCase().includes(searchVal) && !item.category.toLowerCase().includes(searchVal)) {
+                    return false;
+                }
+                if (window.appState.selectedTags.length > 0) {
+                    const itemTags = item.tags || [];
+                    const hasAll = window.appState.selectedTags.every(st => itemTags.map(t => t.toLowerCase()).includes(st.toLowerCase()));
+                    if (!hasAll) return false;
+                }
+                return true;
+            });
+
+            grid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                emptyMsg.classList.remove('hidden');
+            } else {
+                emptyMsg.classList.add('hidden');
+                filtered.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = "dark-retro-box rounded-xl p-3 flex flex-col justify-between space-y-2 hover:border-cher-hotpink transition-all";
+                    
+                    const tagsHtml = (item.tags || []).map(t => `<span class="text-[9px] bg-cher-hotpink/30 text-cher-lightpink border border-cher-hotpink/40 px-1.5 py-0.5 rounded font-bold">#${t}</span>`).join(' ');
+
+                    const imgTag = item.img 
+                        ? `<img src="${item.img}" class="w-full h-24 object-contain mb-1 drop-shadow-md">`
+                        : `<div class="w-full h-24 bg-black/40 rounded-lg flex items-center justify-center text-gray-500 text-xs mb-1">No Image</div>`;
+
+                    card.innerHTML = `
+                        <div>
+                            ${imgTag}
+                            <span class="text-[9px] font-extrabold uppercase text-cher-hotpink block">${item.category}</span>
+                            <h5 class="font-bold text-xs text-white truncate">${item.title}</h5>
+                            <div class="flex flex-wrap gap-1 pt-1">${tagsHtml}</div>
+                        </div>
+                        <div class="flex justify-end space-x-2 pt-2 border-t border-white/10 text-xs">
+                            <button onclick="handleDeleteItem('${item.id}')" class="text-gray-400 hover:text-red-400"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        function renderModalTagSelector() {
+            const container = document.getElementById('modal-tag-selector');
+            if (!container) return;
+
+            const allTags = new Set([...window.appState.customTags]);
+            window.appState.items.forEach(item => {
+                if (item.tags) item.tags.forEach(t => allTags.add(t.toLowerCase().trim()));
+            });
+
+            if (allTags.size === 0) {
+                container.innerHTML = `<span class="text-[11px] text-gray-400 italic">No tags created yet.</span>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            allTags.forEach(tag => {
+                const isSelected = window.appState.modalSelectedTags.includes(tag);
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => {
+                    const idx = window.appState.modalSelectedTags.indexOf(tag);
+                    if (idx > -1) window.appState.modalSelectedTags.splice(idx, 1);
+                    else window.appState.modalSelectedTags.push(tag);
+                    renderModalTagSelector();
+                };
+                btn.className = `px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${isSelected ? 'bg-cher-hotpink text-white' : 'bg-black/60 border border-cher-hotpink/30 text-cher-lightpink'}`;
+                btn.innerText = `#${tag}`;
+                container.appendChild(btn);
+            });
+        }
+
+        // Item Creation & Editing
+        async function handleSaveItem(event) {
+            event.preventDefault();
+            const title = document.getElementById('item-title').value.trim();
+            const category = document.getElementById('item-category').value;
+            const img = document.getElementById('item-img-url').value.trim();
+            const tags = [...window.appState.modalSelectedTags];
+
+            const itemData = { title, category, img, tags };
+
+            try {
+                if (window.appState.userId && window.db) {
+                    const colRef = collection(window.db, 'artifacts', window.appState.appId, 'users', window.appState.userId, 'wardrobe');
+                    await addDoc(colRef, itemData);
+                } else {
+                    window.appState.items.push({ id: Date.now().toString(), ...itemData });
+                    renderAll();
+                }
+                closeItemModal();
+                showToast("Added item!");
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function handleDeleteItem(id) {
+            if (!confirm("Remove item?")) return;
+            try {
+                if (window.appState.userId && window.db) {
+                    const docRef = doc(window.db, 'artifacts', window.appState.appId, 'users', window.appState.userId, 'wardrobe', id);
+                    await deleteDoc(docRef);
+                } else {
+                    window.appState.items = window.appState.items.filter(i => i.id !== id);
+                    renderAll();
+                }
+                showToast("Deleted item.");
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => document.getElementById('item-img-url').value = e.target.result;
+            reader.readAsDataURL(file);
+        }
+
+        function switchTab(tab) {
+            document.getElementById('tab-match').classList.toggle('hidden', tab !== 'match');
+            document.getElementById('tab-wardrobe').classList.toggle('hidden', tab !== 'wardrobe');
+            document.getElementById('nav-match').className = tab === 'match' ? "px-5 py-2 rounded-xl text-xs sm:text-sm font-black transition-all bg-cher-hotpink text-white shadow-[0_0_12px_rgba(255,20,147,0.8)] border border-white/60" : "px-5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-black/50 text-cher-lightpink hover:text-white border border-cher-hotpink/30";
+            document.getElementById('nav-wardrobe').className = tab === 'wardrobe' ? "px-5 py-2 rounded-xl text-xs sm:text-sm font-black transition-all bg-cher-hotpink text-white shadow-[0_0_12px_rgba(255,20,147,0.8)] border border-white/60" : "px-5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-black/50 text-cher-lightpink hover:text-white border border-cher-hotpink/30";
+        }
+
+        function openAddItemModal() {
+            document.getElementById('item-form').reset();
+            window.appState.modalSelectedTags = [];
+            renderModalTagSelector();
+            document.getElementById('modal-item').classList.remove('hidden');
+        }
+        function closeItemModal() { document.getElementById('modal-item').classList.add('hidden'); }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast-msg');
+            document.getElementById('toast-text').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 2500);
+        }
+    </script>
+</body>
+</html>
