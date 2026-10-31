@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Closet</title>
+    <title>Cher's Digital Closet</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -16,12 +16,11 @@
                             brightpink: '#FF69B4',
                             lightpink: '#FFB6C1',
                             softpink: '#FFD1DC',
-                            glitterdark: '#12020A',
-                            carddark: '#1C0A14'
+                            glitterdark: '#0a0006',
+                            carddark: '#14030a'
                         }
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
                         pixel: ['"Courier New"', 'monospace']
                     }
                 }
@@ -31,7 +30,7 @@
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         body {
             background-image: url('https://i.pinimg.com/736x/d7/9d/ec/d79dec51b5c1026343557972fbd27898.jpg');
@@ -39,103 +38,94 @@
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            font-family: 'Inter', sans-serif;
+            font-family: 'VT323', monospace;
+            font-size: 20px;
         }
 
         /* HEADER BACKGROUND */
         .header-bg {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)), url('https://i.pinimg.com/1200x/3f/be/53/3fbe53a05ce82d12f00dfda33391b362.jpg');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), url('https://i.pinimg.com/1200x/3f/be/53/3fbe53a05ce82d12f00dfda33391b362.jpg');
             background-size: cover;
             background-position: center;
         }
 
-        /* RETRO HOT PINK PIXEL GLITTER ARROWS */
-        .pixel-glitter-btn {
+        /* RETRO PIXEL GLITTER BUTTONS */
+        .pixel-btn {
             background: linear-gradient(135deg, #FF69B4 0%, #FF1493 50%, #C71585 100%);
-            border: 2px solid #FFF;
-            box-shadow: 0 0 8px rgba(255, 20, 147, 0.8), inset 0 0 6px rgba(255, 255, 255, 0.8), 3px 3px 0px #000;
+            border: 3px solid #FFF;
+            box-shadow: 4px 4px 0px #000, 0 0 10px rgba(255, 20, 147, 0.9);
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            text-transform: uppercase;
             image-rendering: pixelated;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.15s ease;
+            transition: all 0.1s ease;
         }
-        .pixel-glitter-btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 10%, transparent 20%);
-            background-size: 10px 10px;
-            opacity: 0.4;
-            pointer-events: none;
+        .pixel-btn:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 5px 5px 0px #000, 0 0 15px rgba(255, 105, 180, 1);
         }
-        .pixel-glitter-btn:hover {
-            transform: scale(1.08);
-            box-shadow: 0 0 14px rgba(255, 105, 180, 1), inset 0 0 10px rgba(255, 255, 255, 0.9), 4px 4px 0px #000;
+        .pixel-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #000;
         }
-        .pixel-glitter-btn:active {
-            transform: translate(2px, 2px) scale(0.96);
-            box-shadow: 0 0 4px rgba(255, 20, 147, 0.6), 1px 1px 0px #000;
+
+        /* RETRO WINDOW / CONTAINER BOX */
+        .retro-box {
+            background: rgba(15, 2, 10, 0.95);
+            border: 3px solid #FF1493;
+            box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(255, 20, 147, 0.2);
         }
 
         /* TRANSPARENT SLOT CONTAINER */
         .slot-container {
-            background-color: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(4px);
-            border: 1.5px dashed rgba(255, 255, 255, 0.45);
-            border-radius: 14px;
+            background-color: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(3px);
+            border: 2px dashed rgba(255, 105, 180, 0.6);
+            border-radius: 8px;
             transition: all 0.2s ease;
         }
         .slot-container:hover {
-            background-color: rgba(255, 255, 255, 0.22);
-            border-color: rgba(255, 20, 147, 0.7);
-            box-shadow: 0 0 12px rgba(255, 105, 180, 0.3);
-        }
-
-        /* Sleek Black Box Controls */
-        .dark-retro-box {
-            background: linear-gradient(180deg, rgba(20, 5, 15, 0.92) 0%, rgba(5, 1, 4, 0.95) 100%);
-            border: 1.5px solid rgba(255, 105, 180, 0.4);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 0 12px rgba(255, 20, 147, 0.15);
+            background-color: rgba(255, 255, 255, 0.18);
+            border-color: #FF1493;
+            box-shadow: 0 0 15px rgba(255, 20, 147, 0.4);
         }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(18, 2, 10, 0.6);
+            background: #0a0006;
+            border: 1px solid #FF1493;
         }
         ::-webkit-scrollbar-thumb {
             background: #FF1493;
-            border-radius: 10px;
+            border: 1px solid #fff;
         }
     </style>
 </head>
 <body class="min-h-screen text-white flex flex-col justify-between selection:bg-cher-hotpink selection:text-white">
 
     <!-- TOP GLITTER IMAGE HEADER -->
-    <header class="header-bg w-full border-b-2 border-cher-hotpink/50 sticky top-0 z-40 px-4 sm:px-8 py-3 shadow-2xl">
+    <header class="header-bg w-full border-b-4 border-cher-hotpink sticky top-0 z-40 px-4 sm:px-8 py-3 shadow-2xl">
         <div class="max-w-6xl mx-auto flex items-center justify-between">
             
             <!-- Navigation Controls -->
             <nav class="flex items-center space-x-3">
-                <button id="nav-match" onclick="switchTab('match')" class="px-5 py-2 rounded-xl text-xs sm:text-sm font-black tracking-wide transition-all duration-200 bg-cher-hotpink text-white shadow-[0_0_12px_rgba(255,20,147,0.8)] border border-white/60">
-                    <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> MATCHER
+                <button id="nav-match" onclick="switchTab('match')" class="pixel-btn px-4 py-3 text-white bg-cher-hotpink">
+                    <img src="https://dl2.glitter-graphics.net/pub/79/79082h0evyh0of3.gif" class="inline-block w-4 h-4 mr-1 object-contain"> Matcher
                 </button>
-                <button id="nav-wardrobe" onclick="switchTab('wardrobe')" class="px-5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 bg-black/50 text-cher-lightpink hover:text-white hover:bg-black/70 border border-cher-hotpink/30">
-                    <i class="fa-solid fa-border-all mr-1.5"></i> WARDROBE
+                <button id="nav-wardrobe" onclick="switchTab('wardrobe')" class="pixel-btn px-4 py-3 text-cher-lightpink bg-black/70">
+                    <img src="https://dl2.glitter-graphics.net/pub/79/79082h0evyh0of3.gif" class="inline-block w-4 h-4 mr-1 object-contain"> Wardrobe
                 </button>
             </nav>
 
-            <!-- Account / User ID Status Button -->
+            <!-- User Auth Profile Button -->
             <div class="flex items-center space-x-2">
-                <button id="auth-btn" onclick="openAuthModal()" class="flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl bg-black/60 border border-cher-hotpink/50 text-cher-lightpink hover:text-white text-xs font-bold transition-all shadow-md">
-                    <i class="fa-solid fa-user-sparkles text-cher-hotpink text-sm"></i>
-                    <span id="auth-status-text">Account / Cloud Sync</span>
+                <button onclick="openAuthModal()" class="pixel-btn px-3 py-2 text-cher-lightpink bg-black/80 flex items-center space-x-1.5">
+                    <img src="https://dl2.glitter-graphics.net/pub/79/79082h0evyh0of3.gif" class="w-4 h-4 object-contain">
+                    <span id="auth-status-text">Cloud Sync</span>
                 </button>
             </div>
         </div>
@@ -148,85 +138,27 @@
         <section id="tab-match" class="w-full flex flex-col items-center space-y-6">
             
             <!-- CONTROL BAR BLOCK -->
-            <div class="dark-retro-box w-full max-w-xl p-3.5 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-white">
+            <div class="retro-box w-full max-w-xl p-4 rounded-xl flex flex-wrap items-center justify-between gap-3 text-white">
                 <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-gem text-cher-hotpink text-lg animate-pulse"></i>
-                    <span class="text-xs font-extrabold tracking-wider text-cher-lightpink uppercase">Styling Desk</span>
+                    <img src="https://dl2.glitter-graphics.net/pub/79/79082h0evyh0of3.gif" class="w-6 h-6 object-contain animate-bounce">
+                    <span class="font-['Press_Start_2P'] text-[10px] text-cher-lightpink uppercase">Styling Desk</span>
                 </div>
 
                 <!-- Controls & Tag Filter Generator -->
                 <div class="flex flex-wrap items-center space-x-2 gap-y-2">
-                    <!-- Tag Selector for Random Generator -->
-                    <select id="random-tag-filter" class="bg-black/80 border border-cher-hotpink/50 text-cher-lightpink text-xs font-bold px-2.5 py-2 rounded-xl focus:outline-none">
+                    <select id="random-tag-filter" class="bg-black border-2 border-cher-hotpink text-cher-lightpink text-sm px-2 py-1.5 rounded focus:outline-none font-['VT323']">
                         <option value="ALL">✨ Any Tag</option>
                     </select>
 
-                    <button onclick="spinAllSlots()" class="pixel-glitter-btn px-4 py-2 rounded-xl text-white font-extrabold text-xs flex items-center space-x-2 cursor-pointer">
-                        <i class="fa-solid fa-dice text-sm"></i>
-                        <span>RANDOM GENERATE</span>
+                    <button onclick="spinAllSlots()" class="pixel-btn px-3 py-2 text-white">
+                        Randomize
                     </button>
                     
-                    <button onclick="promptSaveOutfit()" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-cher-lightpink hover:text-white text-xs font-bold transition-all border border-cher-hotpink/40 flex items-center space-x-1.5 shadow-sm">
-                        <i class="fa-solid fa-heart text-cher-hotpink"></i>
-                        <span>Save Match</span>
+                    <button onclick="promptSaveOutfit()" class="pixel-btn px-3 py-2 text-white bg-purple-900">
+                        Save Match
                     </button>
                 </div>
             </div>
 
             <!-- HUMAN PROPORTIONAL CLOSET STACK -->
-            <div class="w-full max-w-xl flex flex-col items-center space-y-2.5 py-2">
-                
-                <!-- 1. HAT SLOT -->
-                <div class="flex items-center space-x-3 justify-center">
-                    <button onclick="cycleSlot('hat', -1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">◀</button>
-                    <div id="slot-box-hat" onclick="openSlotPicker('hat')" class="slot-container w-[140px] h-[70px] flex flex-col items-center justify-center text-center p-1 cursor-pointer relative group overflow-hidden">
-                        <!-- Rendered JS -->
-                    </div>
-                    <button onclick="cycleSlot('hat', 1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">▶</button>
-                </div>
-
-                <!-- 2. NECKLACE / NECK SLOT -->
-                <div class="flex items-center space-x-3 justify-center">
-                    <button onclick="cycleSlot('necklace', -1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">◀</button>
-                    <div id="slot-box-necklace" onclick="openSlotPicker('necklace')" class="slot-container w-[160px] h-[45px] flex flex-col items-center justify-center text-center p-1 cursor-pointer relative group overflow-hidden">
-                        <!-- Rendered JS -->
-                    </div>
-                    <button onclick="cycleSlot('necklace', 1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">▶</button>
-                </div>
-
-                <!-- 3. TORSO / SHIRT / JACKET SLOT -->
-                <div class="flex items-center space-x-3 justify-center">
-                    <button onclick="cycleSlot('shirt', -1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">◀</button>
-                    <div id="slot-box-shirt" onclick="openSlotPicker('shirt')" class="slot-container w-[240px] h-[180px] flex flex-col items-center justify-center text-center p-2 cursor-pointer relative group overflow-hidden">
-                        <!-- Rendered JS -->
-                    </div>
-                    <button onclick="cycleSlot('shirt', 1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">▶</button>
-                </div>
-
-                <!-- 4. PANTS/SKIRT SLOT -->
-                <div class="flex items-center space-x-3 justify-center">
-                    <button onclick="cycleSlot('pants', -1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">◀</button>
-                    <div id="slot-box-pants" onclick="openSlotPicker('pants')" class="slot-container w-[220px] h-[260px] flex flex-col items-center justify-center text-center p-2 cursor-pointer relative group overflow-hidden">
-                        <!-- Rendered JS -->
-                    </div>
-                    <button onclick="cycleSlot('pants', 1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">▶</button>
-                </div>
-
-                <!-- 5. SHOES SLOT -->
-                <div class="flex items-center space-x-3 justify-center">
-                    <button onclick="cycleSlot('shoes', -1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">◀</button>
-                    <div id="slot-box-shoes" onclick="openSlotPicker('shoes')" class="slot-container w-[200px] h-[85px] flex flex-col items-center justify-center text-center p-2 cursor-pointer relative group overflow-hidden">
-                        <!-- Rendered JS -->
-                    </div>
-                    <button onclick="cycleSlot('shoes', 1)" class="pixel-glitter-btn w-8 h-8 rounded-lg text-white font-black text-sm flex items-center justify-center shrink-0">▶</button>
-                </div>
-
-            </div>
-
-            <!-- SAVED FAVORITE OUTFITS BLOCK -->
-            <div class="dark-retro-box w-full max-w-2xl p-5 rounded-2xl space-y-4">
-                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-cher-hotpink/30 pb-3">
-                    <div class="flex items-center space-x-2">
-                        <i class="fa-solid fa-heart text-cher-hotpink text-base"></i>
-                        <h3 class="font-extrabold text-white text-xs uppercase tracking-wider">Saved Favorite Outfits</h3>
-                        <span id="saved-count" class="text-[10px] bg-cher-hotpink/30 border border-cher-hotpink text-cher-lightpink px-2 py-0
+            <div class="w-full max-w-xl flex flex-
